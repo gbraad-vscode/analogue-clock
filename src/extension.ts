@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('vscode-clock.openClock', () => {
+    let disposable = vscode.commands.registerCommand('analogue-clock.openClock', () => {
         ClockPanel.createOrShow(context.extensionUri);
     });
 
@@ -66,24 +66,13 @@ class ClockPanel {
                         background-color: var(--vscode-editor-background);
                     }
 
-                    .clock {
-                        width: 300px;
-                        height: 300px;
-                    }
-
-                    .clock-face {
-                        stroke: var(--vscode-editor-foreground);
-                        fill: none;
-                    }
-
-                    .clock-hand {
-                        stroke: var(--vscode-editor-foreground);
-                        stroke-linecap: round;
+                    #clockface {
+                        height: 96vh;
                     }
                 </style>
             </head>
             <body>
-                <div class="clock">
+                <div class="clockface">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         version="1.1"
                         baseProfile="full"
@@ -118,15 +107,15 @@ class ClockPanel {
 
                 <script>
                     function updateClock() {
-                        var now     = new Date();
-                        var hours   = now.getHours();
-                        var minutes = now.getMinutes();
-                        var time    = Math.min(60000, 1.025 * (1000 * now.getSeconds() + now.getMilliseconds()));
-                        var seconds = Math.floor(time / 1000);
-                        var millis  = time % 1000;
-                        rotate('hourHand',   hours * 30 + minutes * 0.5);
+                        const now = new Date();
+                        const hours = now.getHours();
+                        const minutes = now.getMinutes();
+                        const seconds = now.getSeconds();
+                        const millis = now.getMilliseconds();
+
+                        rotate('hourHand', hours * 30 + minutes * 0.5);
                         rotate('minuteHand', minutes * 6);
-                        rotate('secondHand', 6 * seconds + 3 * (1 + Math.cos(Math.PI + Math.PI * (0.001 * millis))));
+                        rotate('secondHand', seconds * 6 + (6 * millis / 1000));
                     }
 
                     function rotate(id, angle) {

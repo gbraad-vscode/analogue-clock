@@ -20,14 +20,15 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-clock.openClock"
+    "onCommand:analogue-clock.openClock"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
         {
-            "command": "vscode-clock.openClock",
-            "title": "Open Clock"
+            "command": "analogue-clock.openClock",
+            "title": "Open Analogue Clock",
+            "category": "gbraad's Analogue Clock"
         }
     ]
   },
