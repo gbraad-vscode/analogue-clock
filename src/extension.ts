@@ -98,15 +98,15 @@ class ClockPanel {
                         <circle id="faceplateInnerCircle" cx="100" cy="100" r="70" style="fill: black; stroke: black; stroke-width: 3.0"/>
                     </g>
 
-                    <g id="hourHand" class="clock-hand">
-                        <line x1="100" y1="100" x2="100" y2="37" style="stroke: white; stroke-width: 4" />
+                    <g id="hourHand">
+                    <line x1="100" y1="100" x2="100" y2="48" style="stroke: white; stroke-width: 5" />
                     </g>
-                    
-                    <g id="minuteHand" class="clock-hand">
+
+                    <g id="minuteHand">
                         <line x1="100" y1="100" x2="100" y2="33" style="stroke: white; stroke-width: 3" />
                     </g>
 
-                    <g id="secondHand" class="clock-hand">
+                    <g id="secondHand">
                         <line x1="100" y1="100" x2="100" y2="7" style="stroke: rgb(255, 140, 0); stroke-width: 2" />
                     </g>
 
