@@ -1,18 +1,34 @@
 {
-  "name": "",
-  "displayName": "",
-  "description": "",
-  "version": "0.0.1",
+  "name": "analogue-clock",
+  "author": {
+    "name": "Gerard Braad",
+    "email": "me@gbraad.nl"
+  },
+  "publisher": "gbraad",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/gbraad-vscode/clock"
+  },
+  "displayName": "gbraad's Clock",
+  "description": "Gerard Braad's Clock within VS Code",
+  "icon": "img/icon.png",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.98.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:vscode-clock.openClock"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
+        {
+            "command": "vscode-clock.openClock",
+            "title": "Open Clock"
+        }
     ]
   },
   "scripts": {
