@@ -88,11 +88,11 @@ class ClockPanel {
                         width: 96vw;
                     }
 
-                    .hand {
+                    .hand.animate {
                         transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
                     }
 
-                    #secondHand {
+                    #secondHand.animate {
                         transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2);
                     }
                 </style>
@@ -136,8 +136,17 @@ class ClockPanel {
                             case 'rotate':
                                 updateHand(message.id, message.newAngle);
                                 break;
+                            case 'animate':
+                                addAnimateClass();
+                                break;
                         }
                     });
+
+                    function addAnimateClass() {
+                        document.querySelectorAll('.hand').forEach(hand => {
+                            hand.classList.add('animate');
+                        });
+                    }
 
                     function updateHand(id, newAngle) {
                         const hand = document.getElementById(id);
@@ -159,7 +168,8 @@ class ClockPanel {
 
         setTimeout(() => {
             this.clockInterval = setInterval(() => this.updateClock(), 1000);
-        }, 50);
+            this._panel.webview.postMessage({ command: 'animate' });
+        }, 200);
 
     }
 
