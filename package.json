@@ -12,9 +12,9 @@
   "displayName": "gbraad's Analogue Clock",
   "description": "Gerard Braad's Anologue Clock for use within VS Code",
   "icon": "img/icon.png",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "engines": {
-    "vscode": "^1.96.0"
+    "vscode": "^1.94.0"
   },
   "categories": [
     "Other"
@@ -23,6 +23,7 @@
     "onCommand:analogue-clock.openClock"
   ],
   "main": "./dist/extension.js",
+  "browser": "./dist/extension.js",
   "contributes": {
     "commands": [
         {
@@ -44,7 +45,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
+    "@types/vscode": "^1.94.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
