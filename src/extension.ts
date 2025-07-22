@@ -22,19 +22,14 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Command for sidebar view
     let sidebarDisposable = vscode.commands.registerCommand('analogue-clock.openClockSidebar', () => {
-        vscode.commands.executeCommand('analogue-clock.focusClockSidebar');
+        vscode.commands.executeCommand('analogue-clock.sidebarClock.focus');
     });
 
     // Register the sidebar provider
     const clockSidebarProvider = new ClockSidebarProvider(context.extensionUri);
     const sidebarProviderDisposable = vscode.window.registerWebviewViewProvider(ClockSidebarProvider.viewType, clockSidebarProvider);
 
-    // Optional: focus sidebar view command
-    let focusSidebarDisposable = vscode.commands.registerCommand('analogue-clock.focusClockSidebar', () => {
-        vscode.commands.executeCommand('workbench.view.extension.clockSidebar');
-    });
-
-    context.subscriptions.push(panelDisposable, sidebarDisposable, sidebarProviderDisposable, focusSidebarDisposable);
+    context.subscriptions.push(panelDisposable, sidebarDisposable, sidebarProviderDisposable);
 }
 
 class ClockPanel {
