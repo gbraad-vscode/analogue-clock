@@ -12,7 +12,7 @@
   "displayName": "gbraad's Analogue Clock",
   "description": "Gerard Braad's Anologue Clock for use within VS Code",
   "icon": "img/icon.png",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -37,7 +37,7 @@
         {
           "id": "clockSidebar-container",
           "title": "gbraad's Analogue Clock",
-          "icon": "assets/clock.svg"
+          "icon": "img/icon.svg"
         }
       ]
     },
