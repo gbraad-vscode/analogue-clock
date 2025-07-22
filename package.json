@@ -12,7 +12,7 @@
   "displayName": "gbraad's Analogue Clock",
   "description": "Gerard Braad's Anologue Clock for use within VS Code",
   "icon": "img/icon.png",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -20,42 +20,37 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:analogue-clock.openClock",
-    "onCommand:analogue-clock.openClockSidebar",
     "onView:analogue-clock.sidebarClock"
   ],
   "main": "./dist/extension.js",
   "browser": "./dist/extension.js",
   "contributes": {
     "commands": [
-        {
-          "command": "analogue-clock.openClock",
-          "title": "Open Analogue Clock (Editor Tab)",
-          "category": "gbraad's Analogue Clock"
-        },
-        {
-          "command": "analogue-clock.openClockSidebar",
-          "title": "Open Analogue Clock (Sidebar)",
-          "category": "gbraad's Analogue Clock"
-        }
-      ],
-      "viewsContainers": {
-        "activitybar": [
-          {
-            "id": "clockSidebar",
-            "title": "Clock",
-            "icon": "img/clock-icon.svg"
-          }
-        ]
-      },
-      "views": {
-        "clockSidebar": [
-          {
-            "id": "analogue-clock.sidebarClock",
-            "name": "gbraad's Analogue Clock"
-          }
-        ]
+      {
+        "command": "analogue-clock.openClock",
+        "title": "Open Analogue Clock (Tab)",
+        "category": "gbraad's Analogue Clock"
       }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "clockSidebar-container",
+          "title": "gbraad's Analogue Clock",
+          "icon": "assets/clock.svg"
+        }
+      ]
+    },
+    "views": {
+      "clockSidebar-container": [
+        {
+          "type": "webview",
+          "id": "analogue-clock.sidebarClock",
+          "name": "gbraad's Analogue Clock",
+          "when": "true"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

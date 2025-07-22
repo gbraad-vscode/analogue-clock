@@ -15,21 +15,17 @@ const currentAngles: Angles = {
 type AngleKey = keyof Angles;
 
 export function activate(context: vscode.ExtensionContext) {
-    // Command for panel (editor tab)
-    let panelDisposable = vscode.commands.registerCommand('analogue-clock.openClock', () => {
-        ClockPanel.createOrShow(context.extensionUri);
-    });
+    // Register the sidebar provider.
+    const sidebarProvider = new ClockSidebarProvider(context.extensionUri);
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(ClockSidebarProvider.viewType, sidebarProvider)
+    );
 
-    // Command for sidebar view
-    let sidebarDisposable = vscode.commands.registerCommand('analogue-clock.openClockSidebar', () => {
-        vscode.commands.executeCommand('analogue-clock.sidebarClock.focus');
-    });
-
-    // Register the sidebar provider
-    const clockSidebarProvider = new ClockSidebarProvider(context.extensionUri);
-    const sidebarProviderDisposable = vscode.window.registerWebviewViewProvider(ClockSidebarProvider.viewType, clockSidebarProvider);
-
-    context.subscriptions.push(panelDisposable, sidebarDisposable, sidebarProviderDisposable);
+    context.subscriptions.push(
+        vscode.commands.registerCommand('analogue-clock.openClock', () => {
+            ClockPanel.createOrShow(context.extensionUri);
+        })
+    );
 }
 
 class ClockPanel {
