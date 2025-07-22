@@ -12,7 +12,7 @@
   "displayName": "gbraad's Analogue Clock",
   "description": "Gerard Braad's Anologue Clock for use within VS Code",
   "icon": "img/icon.png",
-  "version": "0.2.0",
+  "version": "0.2.5",
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -27,11 +27,33 @@
   "contributes": {
     "commands": [
         {
-            "command": "analogue-clock.openClock",
-            "title": "Open Analogue Clock",
-            "category": "gbraad's Analogue Clock"
+          "command": "analogue-clock.openClock",
+          "title": "Open Analogue Clock (Editor Tab)",
+          "category": "gbraad's Analogue Clock"
+        },
+        {
+          "command": "analogue-clock.openClockSidebar",
+          "title": "Open Analogue Clock (Sidebar)",
+          "category": "gbraad's Analogue Clock"
         }
-    ]
+      ],
+      "viewsContainers": {
+        "activitybar": [
+          {
+            "id": "clockSidebar",
+            "title": "Clock",
+            "icon": "img/clock-icon.svg"
+          }
+        ]
+      },
+      "views": {
+        "clockSidebar": [
+          {
+            "id": "analogue-clock.sidebarClock",
+            "name": "gbraad's Analogue Clock"
+          }
+        ]
+      }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
