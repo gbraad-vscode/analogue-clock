@@ -167,7 +167,6 @@ class ClockSidebarProvider implements vscode.WebviewViewProvider {
     }
 }
 
-// Reusable webview content
 function getWebviewContent() {
     return `
         <!DOCTYPE html>
@@ -176,21 +175,25 @@ function getWebviewContent() {
             <meta charset="utf-8">
             <title>gbraad's Analogue Clock</title>
             <style>
-                body {
-                    overflow: hidden;
-                    min-height: 100%;
+                html, body {
+                    height: 100%;
+                    width: 100%;
                     margin: 0;
-                    background-color: var(--vscode-editor-background);
+                    padding: 0;
+                    overflow: hidden;
+                    background-color: transparent;
                 }
 
-                html {
-                    height: 100%;
-                    background: transparent;
+                body {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
 
                 #clockface {
-                    height: 96vh;
-                    width: 96vw;
+                    /* Use the smaller of the viewport width or height */
+                    width: 95vmin;
+                    height: 95vmin;
                 }
 
                 .hand.animate {
