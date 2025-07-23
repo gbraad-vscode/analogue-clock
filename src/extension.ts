@@ -15,7 +15,6 @@ const currentAngles: Angles = {
 type AngleKey = keyof Angles;
 
 export function activate(context: vscode.ExtensionContext) {
-    // Register the sidebar provider.
     const sidebarProvider = new ClockSidebarProvider(context.extensionUri);
     context.subscriptions.push(
         vscode.window.registerWebviewViewProvider(ClockSidebarProvider.viewType, sidebarProvider)
@@ -70,55 +69,22 @@ class ClockPanel {
     }
 
     private startClock() {
-        this.updateClock(true);
+        updateClock(this._panel.webview, true); // Use global updateClock
         if (this.clockInterval) {
             clearInterval(this.clockInterval);
         }
 
         setTimeout(() => {
-            this.clockInterval = setInterval(() => this.updateClock(), 1000);
+            this.clockInterval = setInterval(() => updateClock(this._panel.webview), 1000);
             this._panel.webview.postMessage({ command: 'animate' });
         }, 200);
-
-    }
-
-    private updateClock(reinitialize = false) {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
-
-        const targetHourAngle = (hours % 12) * 30 + minutes * 0.5;
-        const targetMinAngle = minutes * 6;
-        const targetSecAngle = seconds * 6;
-
-        if (reinitialize) {
-            currentAngles.hourHand = targetHourAngle;
-            currentAngles.minuteHand = targetMinAngle;
-            currentAngles.secondHand = targetSecAngle;
-        }
-
-        this.updateHand('hourHand', targetHourAngle);
-        this.updateHand('minuteHand', targetMinAngle);
-        this.updateHand('secondHand', targetSecAngle);
-    }
-
-    private updateHand(id: AngleKey, targetAngle: number) {
-        let currentAngle = currentAngles[id] || 0;
-        let angleDiff = targetAngle - (currentAngle % 360);
-
-        if (angleDiff > 180) angleDiff -= 360;
-        if (angleDiff < -180) angleDiff += 360;
-
-        const newAngle = currentAngle + angleDiff;
-        currentAngles[id] = newAngle;
-
-        // Send message to webview to update the hand
-        this._panel.webview.postMessage({ command: 'rotate', id, newAngle });
     }
 
     public dispose() {
         ClockPanel.currentPanel = undefined;
+        if (this.clockInterval) {
+            clearInterval(this.clockInterval);
+        }
         this._panel.dispose();
         while (this._disposables.length) {
             const disposable = this._disposables.pop();
@@ -151,10 +117,16 @@ class ClockSidebarProvider implements vscode.WebviewViewProvider {
 
         webviewView.webview.html = getWebviewContent();
         this.startClock(webviewView.webview);
+
+        webviewView.onDidDispose(() => {
+            if (this.clockInterval) {
+                clearInterval(this.clockInterval);
+            }
+        });
     }
 
     private startClock(webview: vscode.Webview) {
-        updateClock(webview, true);
+        updateClock(webview, true); // Use global updateClock
         if (this.clockInterval) {
             clearInterval(this.clockInterval);
         }
@@ -268,6 +240,29 @@ function getWebviewContent() {
     `;
 }
 
+
+/**
+ * Calculates the new cumulative angle for a hand and posts the message to the webview.
+ * This is the "stateful" logic that prevents the 360-degree jump.
+ */
+function updateHand(webview: vscode.Webview, id: AngleKey, targetAngle: number) {
+    let currentAngle = currentAngles[id] || 0;
+    let angleDiff = targetAngle - (currentAngle % 360);
+
+    // Find the shortest path to the new angle
+    if (angleDiff > 180) angleDiff -= 360;
+    if (angleDiff < -180) angleDiff += 360;
+
+    const newAngle = currentAngle + angleDiff;
+    currentAngles[id] = newAngle; // Update the global state
+
+    // Send message to webview to update the hand
+    webview.postMessage({ command: 'rotate', id, newAngle });
+}
+
+/**
+ * The main clock update function, now used by both the panel and the sidebar.
+ */
 function updateClock(webview: vscode.Webview, reinitialize = false) {
     const now = new Date();
     const hours = now.getHours();
@@ -279,14 +274,16 @@ function updateClock(webview: vscode.Webview, reinitialize = false) {
     const targetSecAngle = seconds * 6;
 
     if (reinitialize) {
+        // On first load, set the cumulative angle directly
         currentAngles.hourHand = targetHourAngle;
         currentAngles.minuteHand = targetMinAngle;
         currentAngles.secondHand = targetSecAngle;
     }
 
-    webview.postMessage({ command: 'rotate', id: 'hourHand', newAngle: targetHourAngle });
-    webview.postMessage({ command: 'rotate', id: 'minuteHand', newAngle: targetMinAngle });
-    webview.postMessage({ command: 'rotate', id: 'secondHand', newAngle: targetSecAngle });
+    // Use the stateful updateHand function for all updates
+    updateHand(webview, 'hourHand', targetHourAngle);
+    updateHand(webview, 'minuteHand', targetMinAngle);
+    updateHand(webview, 'secondHand', targetSecAngle);
 }
 
 export function deactivate() {}
